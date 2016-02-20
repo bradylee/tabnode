@@ -1,0 +1,17 @@
+<ion-view view-title="Your Open Tab">
+  <ion-content class="center padding">
+  	<h3>{{tabInfo.name}}</h3>
+  	<h4>{{tabInfo.restaurant}}</h4>
+
+  	<br>
+  	<h3>The folks included on this tab:</h3>
+  	<div class="text-right padding">
+  		<a class="button button-outline button-balanced" href="#/app/edit_tab_members">edit</a>
+  	</div>
+  	<div class="list">
+		<div class="item outline" ng-repeat="friend in members">
+		    {{friend.name}}
+  		</div>
+	</div>
+  </ion-content>
+</ion-view>
