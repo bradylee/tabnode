@@ -23,19 +23,7 @@ router.route('/')
         return console.error(err);
       } else {
         //respond to both HTML and JSON. JSON responses require 'Accept: application/json;' in the Request Header
-        res.format({
-          //HTML response will render the index.jade file in the views/tabs folder. We are also setting 'tabs' to be an accessible variable in our jade view
-          html: function(){
-            res.render('tabs/index', {
-                  title: 'All my tabs',
-                  'tabs' : tabs
-              });
-          },
-          //JSON response will show all tabs in JSON format
-          json: function(){
-            res.json(tabs);
-          }
-        });
+        res.json(tabs);
       }     
     });
   })
@@ -61,6 +49,7 @@ router.route('/')
           name : name,
           owner: user._id,
           total: total,
+          members: members,
         }, function (err, tab) {
           if (err) {
             res.send('There was a problem adding the information to the database.');
@@ -69,12 +58,20 @@ router.route('/')
             console.log('POST creating new tab: ' + tab);
 
             // add tab to user
-            user.open_tabs.push(tab._id);
+            user.open_tab = tab._id;
             user.save(function(err) {
               if (err) {
                 res.send('There was a problem adding the information to the database.');
               } else {
-                res.json(tab);
+
+                mongoose.model('User').update({_id: { $in: members}}, {open_tab: tab}, {multi: true}, function(err, users) {
+                  if (err) {
+                    console.log('PUT Error: There was a problem updating: ' + err);
+                  } else {
+                    console.log('PUT updating: ' + users);
+                    res.json(tab);
+                  }
+                });
               }
             });
           }
@@ -110,7 +107,6 @@ router.route('/:id')
     });
   });
 */
-
 
 
 module.exports = router;

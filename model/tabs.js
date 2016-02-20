@@ -21,6 +21,10 @@ var tabSchema = new mongoose.Schema({
     ref: 'Item',
   }],
 */
+  items: [{
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'BillItem',
+  }],
   total: Number,
 });
 
