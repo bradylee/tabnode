@@ -1,38 +1,31 @@
-var express = require('express'),
-    path = require('path'),
-    favicon = require('serve-favicon'),
-    logger = require('morgan'),
-    cookieParser = require('cookie-parser'),
-    bodyParser = require('body-parser');
+var path = require('path');
+var qs = require('querystring');
 
-var routes = require('./routes/index'),
-    users = require('./routes/users'),
-    tabs = require('./routes/tabs'),
-    items = require('./routes/bill-items');
+var bodyParser = require('body-parser');
+var colors = require('colors');
+var cors = require('cors');
+var express = require('express');
+var logger = require('morgan');
 
-var db = require('./model/db'),
-    user = require('./model/users'),
-    tab = require('./model/tabs'),
-    item = require('./model/bill-items');
+var db = require('./model/db');
+var user = require('./model/users');
+
+var routes = require('./routes/index');
+var users = require('./routes/users');
+var auth = require('./routes/auth');
 
 var app = express();
 
-// view engine setup
-app.set('views', path.join(__dirname, 'views'));
-app.set('view engine', 'jade');
 
-// uncomment after placing your favicon in /public
-//app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
+app.use(cors());
 app.use(logger('dev'));
 app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: false }));
-app.use(cookieParser());
+app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', routes);
 app.use('/users', users);
-app.use('/tabs', tabs);
-app.use('/tabs', items);
+app.use('/auth', auth);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
