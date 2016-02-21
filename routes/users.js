@@ -36,5 +36,22 @@ router.route('/:username')
     });
   });
 
+router.route('/:username/friends')
+  .get(function(req, res) {
+    User.findOne({username: req.params.username})
+      .populate('friends')
+      .exec(function(err, user) {
+      if (err) {
+        console.log('GET Error: There was a problem retrieving: ' + err);
+      } else {
+        console.log('GET Retrieving username: ' + user._id);
+
+        res.json(user.friends);
+      }
+    });
+  });
+
+router.route('/:username/friends/add')
+
 
 module.exports = router;

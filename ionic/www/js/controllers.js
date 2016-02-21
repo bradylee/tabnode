@@ -7,6 +7,7 @@ angular.module('starter.controllers', [])
     });
 
     $scope.logout = function() {
+      window.localStorage.setItem('username', undefined);
       $auth.logout().then(function() {
         $state.go('login');
       });
@@ -27,6 +28,7 @@ angular.module('starter.controllers', [])
             title: 'Success',
             content: 'You have successfully logged in!'
           })
+          window.localStorage.setItem('username', username);
           $state.go('app.home');
         })
         .catch(function(response) {
@@ -57,6 +59,7 @@ angular.module('starter.controllers', [])
 
 
     $scope.logout = function() {
+      window.localStorage.setItem('username', undefined);
       $auth.logout();
     };
 
@@ -67,13 +70,20 @@ angular.module('starter.controllers', [])
 
   // controller for the open a new tab state
   .controller('TabCtrl', function($scope, TabService, FriendService) {
-    $scope.friends = FriendService.query();
-    $scope.showList = false;
+    FriendService.query().then(function(res) {
+      $scope.friends = res.data;
+      console.log($scope.friends);
+    });
+
     $scope.inviteList = [];
 
     // function to add user's selections to the list of invites
     $scope.addFriendToInviteList = function(friend) {
-      inviteList.push(friend);
+      var index = $scope.friends.indexOf(friend);
+      if (index >= 0)
+        $scope.friends.splice(index, 1);
+
+      $scope.inviteList.push(friend);
     };
 
     $scope.createTab = function() {

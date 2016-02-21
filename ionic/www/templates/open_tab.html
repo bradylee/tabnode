@@ -10,8 +10,8 @@
         <input type="text" ng-model="searchText.name" placeholder="Who are you dining with?" ng-focus="showList = true" ng-blur="showList = false">
       </label>
       <div class="list" ng-if="showList">
-          <div class="item outline" ng-repeat="friend in friends | filter:searchText" ng-click="addToInviteList(friend)">
-            <span id={{friend}}>{{friend.name}}</span>
+          <div class="item outline" ng-repeat="friend in friends | filter:searchText" ng-click="addFriendToInviteList(friend)">
+            <span id={{friend.username}}>{{friend.first_name}} {{friend.last_name}}</span>
           </div>
       </div>
     </div>
@@ -25,7 +25,7 @@
     Current members:
     <div class="list">
       <div class="item" ng-repeat="friend in inviteList">
-        {{friend.name}}
+        {{friend.first_name}} {{friend.last_name}}
       </div>
     </div>
   </ion-content>

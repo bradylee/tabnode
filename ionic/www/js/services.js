@@ -10,10 +10,11 @@ angular.module('starter.services', [])
   .factory('FriendService', function($auth, $http, BASE_URI) {
     return {
       query: function() {
+        var username = window.localStorage.getItem('username', '');
         var token = $auth.getToken();
-        return $http.get(BASE_URI + '/friends', {
-          params: { token: token }
+        return $http.get(BASE_URI + '/users/'+ username +'/friends', {
+          'Authorization': token
         });
       }
     };
-  });
+  })
